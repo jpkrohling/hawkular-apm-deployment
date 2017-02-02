@@ -1,40 +1,41 @@
-= Qaclana Deployment scripts
+= Hawkular APM Deployment scripts
 
 This is an assorted collection of deployment scripts. These might or not work at any given point in time,
 and are mostly helpers.
 
-== Deploying an OpenShift cluster with Qaclana
+== Deploying an OpenShift cluster with Hawkular APM
 
 [source,bash]
 ----
-$ ansible-playbook qaclana-ansible-openshift.yml
+$ ansible-playbook hawkular-apm-ansible-openshift.yml
 ----
 
 Try experimenting with the `ansible-vars.yml` file!
 
-== Deploying Qaclana into an existing OpenShift cluster
+== Deploying Hawkular APM into an existing OpenShift cluster
 
-Assuming that `oc login` has been performed, this command can be used to deploy the Qaclana services
+Assuming that `oc login` has been performed, this command can be used to deploy the Hawkular APM services
 into an existing OpenShift cluster:
 [source,bash]
 ----
-$ oc create -f qaclana-openshift.yml
+$ oc create -f hawkular-apm-openshift.yml
 ----
 
 To remote the items created by the command above, this can be executed:
 [source,bash]
 ----
-$ oc delete -f qaclana-openshift.yml
+$ oc delete -f hawkular-apm-openshift.yml
 ----
 
 For the clustering to work, don't forget to `sudo iptables -F`.
 
 == License
 
-Qaclana is released under Apache License, Version 2.0 as described in the link:LICENSE[LICENSE] document
+Hawkular APM is released under Apache License, Version 2.0 as described in the link:LICENSE[LICENSE] document
 
 ----
-   Copyright 2016-2017 Juraci Paixão Kröhling
+   Copyright 2017 Red Hat, Inc. and/or its affiliates
+   and other contributors as indicated by the @author tags.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
