@@ -1,0 +1,9 @@
+---
+project_name: hawkular-apm
+create_openshift_cluster: true
+
+# try `latest` as well :)
+openshift_version: latest
+
+# try `true` as well!
+openshift_use_metrics: true

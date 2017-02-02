@@ -1,0 +1,50 @@
+= Qaclana Deployment scripts
+
+This is an assorted collection of deployment scripts. These might or not work at any given point in time,
+and are mostly helpers.
+
+== Deploying an OpenShift cluster with Qaclana
+
+[source,bash]
+----
+$ ansible-playbook qaclana-ansible-openshift.yml
+----
+
+Try experimenting with the `ansible-vars.yml` file!
+
+== Deploying Qaclana into an existing OpenShift cluster
+
+Assuming that `oc login` has been performed, this command can be used to deploy the Qaclana services
+into an existing OpenShift cluster:
+[source,bash]
+----
+$ oc create -f qaclana-openshift.yml
+----
+
+To remote the items created by the command above, this can be executed:
+[source,bash]
+----
+$ oc delete -f qaclana-openshift.yml
+----
+
+For the clustering to work, don't forget to `sudo iptables -F`.
+
+== License
+
+Qaclana is released under Apache License, Version 2.0 as described in the link:LICENSE[LICENSE] document
+
+----
+   Copyright 2016-2017 Juraci Paixão Kröhling
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+----

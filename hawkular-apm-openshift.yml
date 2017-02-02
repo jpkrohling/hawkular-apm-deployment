@@ -1,0 +1,278 @@
+---
+apiVersion: "v1"
+metadata:
+  name: hawkular-apm
+items:
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    name: hawkular-apm-data-collector
+  spec:
+    tls:
+      insecureEdgeTerminationPolicy: Allow
+      termination: edge
+    to:
+      kind: Service
+      name: hawkular-apm-data-collector
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: hawkular-apm-data-collector
+  spec:
+    replicas: 1
+    selector:
+      name: hawkular-apm-data-collector
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          name: hawkular-apm-data-collector
+      spec:
+        containers:
+        - capabilities: {}
+          image: hawkular-apm-data-collector-snapshot
+          imagePullPolicy: IfNotPresent
+          name: hawkular-apm-data-collector
+          terminationMessagePath: /dev/termination-log
+          readinessProbe:
+            timeoutSeconds: 10
+            initialDelaySeconds: 1
+            httpGet:
+              path: "/status"
+              port: 8090
+          livenessProbe:
+            timeoutSeconds: 10
+            initialDelaySeconds: 1
+            httpGet:
+              path: "/status"
+              port: 8090
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: hawkular-apm-data-collector
+    creationTimestamp: null
+    name: hawkular-apm-data-collector
+  spec:
+    ports:
+    - name: web
+      nodePort: 0
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      name: hawkular-apm-data-collector
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    name: hawkular-apm-data-publisher
+  spec:
+    tls:
+      insecureEdgeTerminationPolicy: Allow
+      termination: edge
+    to:
+      kind: Service
+      name: hawkular-apm-data-publisher
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: hawkular-apm-data-publisher
+  spec:
+    replicas: 1
+    selector:
+      name: hawkular-apm-data-publisher
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          name: hawkular-apm-data-publisher
+      spec:
+        containers:
+        - capabilities: {}
+          image: hawkular-apm-data-publisher-snapshot
+          imagePullPolicy: IfNotPresent
+          name: hawkular-apm-data-publisher
+          terminationMessagePath: /dev/termination-log
+          readinessProbe:
+            timeoutSeconds: 10
+            initialDelaySeconds: 1
+            httpGet:
+              path: "/status"
+              port: 8091
+          livenessProbe:
+            timeoutSeconds: 10
+            initialDelaySeconds: 1
+            httpGet:
+              path: "/status"
+              port: 8091
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: hawkular-apm-data-publisher
+    creationTimestamp: null
+    name: hawkular-apm-data-publisher
+  spec:
+    ports:
+    - name: web
+      nodePort: 0
+      port: 80
+      protocol: TCP
+      targetPort: 8081
+    selector:
+      name: hawkular-apm-data-publisher
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    name: hawkular-apm-data-reader
+  spec:
+    tls:
+      insecureEdgeTerminationPolicy: Allow
+      termination: edge
+    to:
+      kind: Service
+      name: hawkular-apm-data-reader
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: hawkular-apm-data-reader
+  spec:
+    replicas: 1
+    selector:
+      name: hawkular-apm-data-reader
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          name: hawkular-apm-data-reader
+      spec:
+        containers:
+        - capabilities: {}
+          image: hawkular-apm-data-reader-snapshot
+          imagePullPolicy: IfNotPresent
+          name: hawkular-apm-data-reader
+          terminationMessagePath: /dev/termination-log
+          readinessProbe:
+            timeoutSeconds: 10
+            initialDelaySeconds: 1
+            httpGet:
+              path: "/status"
+              port: 8092
+          livenessProbe:
+            timeoutSeconds: 10
+            initialDelaySeconds: 1
+            httpGet:
+              path: "/status"
+              port: 8092
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: hawkular-apm-data-reader
+    creationTimestamp: null
+    name: hawkular-apm-data-reader
+  spec:
+    ports:
+    - name: web
+      nodePort: 0
+      port: 80
+      protocol: TCP
+      targetPort: 8082
+    selector:
+      name: hawkular-apm-data-reader
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    name: hawkular-apm-persistent-data
+  spec:
+    tls:
+      insecureEdgeTerminationPolicy: Allow
+      termination: edge
+    to:
+      kind: Service
+      name: hawkular-apm-persistent-data
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: hawkular-apm-persistent-data
+  spec:
+    replicas: 1
+    selector:
+      name: hawkular-apm-persistent-data
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          name: hawkular-apm-persistent-data
+      spec:
+        containers:
+        - capabilities: {}
+          image: hawkular-apm-persistent-data-snapshot
+          imagePullPolicy: IfNotPresent
+          name: hawkular-apm-persistent-data
+          terminationMessagePath: /dev/termination-log
+          readinessProbe:
+            timeoutSeconds: 10
+            initialDelaySeconds: 1
+            httpGet:
+              path: "/status"
+              port: 8093
+          livenessProbe:
+            timeoutSeconds: 10
+            initialDelaySeconds: 1
+            httpGet:
+              path: "/status"
+              port: 8093
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: hawkular-apm-persistent-data
+    creationTimestamp: null
+    name: hawkular-apm-persistent-data
+  spec:
+    ports:
+    - name: web
+      nodePort: 0
+      port: 80
+      protocol: TCP
+      targetPort: 8083
+    selector:
+      name: hawkular-apm-persistent-data
+    sessionAffinity: None
+    type: ClusterIP
+kind: "List"
